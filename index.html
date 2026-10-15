@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10283f">
+    <meta name="description" content="하루 루틴을 기록하고 실천 패턴을 확인하는 DAYFLOW 대시보드">
+    <title>DAYFLOW | 하루 루틴 분석</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="주 메뉴">
+        <a class="brand" href="#dashboard" aria-label="DAYFLOW 대시보드">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>DAYFLOW</span>
+        </a>
+        <div class="sidebar-caption">워크스페이스</div>
+        <nav class="side-nav">
+          <a class="nav-link is-active" href="#dashboard"><span class="nav-symbol" aria-hidden="true">◫</span>대시보드</a>
+          <a class="nav-link" href="#routines"><span class="nav-symbol" aria-hidden="true">☷</span>내 루틴</a>
+          <a class="nav-link" href="#insights"><span class="nav-symbol" aria-hidden="true">⌁</span>주간 인사이트</a>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sidebar-note">
+            <span class="note-dot" aria-hidden="true"></span>
+            <div><strong>나만의 페이스로</strong><p>작은 반복이 하루를 만듭니다.</p></div>
+          </div>
+          <div class="profile-row">
+            <span class="profile-avatar" aria-hidden="true">D</span>
+            <span><strong>나의 하루</strong><small>개인 워크스페이스</small></span>
+            <span class="profile-menu" aria-hidden="true">···</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <div class="breadcrumb"><span>워크스페이스</span><span class="crumb-divider">/</span><strong>대시보드</strong></div>
+          <div class="topbar-right">
+            <span class="sync-status"><span class="status-dot" aria-hidden="true"></span><span id="save-status">이 기기에 저장됨</span></span>
+            <span class="topbar-avatar" aria-label="내 프로필">D</span>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <section class="welcome-row" id="dashboard" aria-labelledby="page-title">
+            <div>
+              <p class="eyebrow" id="today-label">오늘의 흐름</p>
+              <h1 id="page-title">좋은 하루는 작은 습관에서 시작돼요.</h1>
+              <p class="welcome-copy">오늘의 루틴을 확인하고, 나만의 리듬을 만들어 보세요.</p>
+            </div>
+            <button class="button button-primary welcome-add" type="button" data-open-form>
+              <span class="button-plus" aria-hidden="true">+</span>루틴 추가
+            </button>
+          </section>
+
+          <section class="date-bar" aria-label="기록 날짜 선택">
+            <div class="date-controls">
+              <button class="icon-button" id="previous-day" type="button" aria-label="이전 날짜">‹</button>
+              <h2 id="selected-date">날짜</h2>
+              <button class="icon-button" id="next-day" type="button" aria-label="다음 날짜">›</button>
+            </div>
+            <button class="button button-today" id="go-today" type="button">오늘로</button>
+          </section>
+
+          <section class="stats-grid" aria-label="선택한 날짜의 요약">
+            <article class="stat-card stat-card-primary">
+              <div class="stat-head"><span id="routine-count-label">오늘의 루틴</span><span class="stat-icon icon-navy" aria-hidden="true">☷</span></div>
+              <div class="stat-value"><strong id="routine-count">0</strong><span>개</span></div>
+              <p class="stat-foot">실천할 루틴</p>
+            </article>
+            <article class="stat-card">
+              <div class="stat-head"><span>완료한 루틴</span><span class="stat-icon icon-green" aria-hidden="true">✓</span></div>
+              <div class="stat-value"><strong id="completed-count">0</strong><span>개</span></div>
+              <p class="stat-foot" id="completed-caption">차근차근 시작해요</p>
+            </article>
+            <article class="stat-card">
+              <div class="stat-head"><span id="completion-rate-label">오늘의 달성률</span><span class="stat-icon icon-mint" aria-hidden="true">↗</span></div>
+              <div class="stat-value"><strong id="completion-rate">0</strong><span>%</span></div>
+              <p class="stat-foot" id="rate-caption">완료 기록을 쌓아 보세요</p>
+            </article>
+            <article class="stat-card">
+              <div class="stat-head"><span>연속 실천</span><span class="stat-icon icon-yellow" aria-hidden="true">✳</span></div>
+              <div class="stat-value"><strong id="streak-count">0</strong><span>일</span></div>
+              <p class="stat-foot">하루 전체 루틴 완료 기준</p>
+            </article>
+          </section>
+
+          <section class="overview-grid" id="insights" aria-label="실천 현황과 주간 통계">
+            <article class="panel progress-panel">
+              <div class="panel-heading">
+                <div><p class="eyebrow">오늘의 기록</p><h2>오늘의 진행 상황</h2></div>
+                <span class="progress-date" id="progress-date">오늘</span>
+              </div>
+              <div class="progress-summary"><strong id="progress-percent">0%</strong><span id="progress-summary-text">아직 기록이 없어요</span></div>
+              <div class="progress-track" role="progressbar" aria-label="오늘 루틴 달성률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar"><span id="progress-fill"></span></div>
+              <div class="progress-legend"><span><i class="legend-complete"></i>완료 <strong id="progress-done">0</strong></span><span><i class="legend-pending"></i>남음 <strong id="progress-left">0</strong></span></div>
+              <div class="progress-tip"><span class="tip-spark" aria-hidden="true">✦</span><p id="progress-tip">작은 루틴 하나부터 체크해 볼까요?</p></div>
+            </article>
+
+            <article class="panel chart-panel">
+              <div class="panel-heading chart-heading">
+                <div><p class="eyebrow">최근 7일</p><h2>주간 실천 흐름</h2></div>
+                <span class="chart-legend"><i></i>완료율</span>
+              </div>
+              <div class="chart-wrap"><canvas id="weekly-chart" aria-label="최근 7일 루틴 완료율 그래프" role="img"></canvas></div>
+              <p class="chart-footnote" id="chart-footnote">날짜별 완료 기록을 바탕으로 계산해요.</p>
+            </article>
+          </section>
+
+          <section class="lower-grid">
+            <article class="panel routines-panel" id="routines">
+              <div class="panel-heading routines-heading">
+                <div><p class="eyebrow">나의 습관 기록</p><h2>나의 루틴 <span class="heading-count" id="routine-list-count">0</span></h2></div>
+                <div class="routine-actions">
+                  <label class="sr-only" for="category-filter">카테고리 필터</label>
+                  <select class="category-filter" id="category-filter">
+                    <option value="all">전체 카테고리</option>
+                    <option value="공부">공부</option>
+                    <option value="운동">운동</option>
+                    <option value="건강">건강</option>
+                    <option value="생활">생활</option>
+                    <option value="기타">기타</option>
+                  </select>
+                  <button class="button button-outline add-routine-secondary" type="button" data-open-form><span aria-hidden="true">+</span>추가</button>
+                </div>
+              </div>
+              <div class="routine-list" id="routine-list"></div>
+              <div class="empty-state" id="empty-state" hidden>
+                <span class="empty-illustration" aria-hidden="true"><i></i><i></i><i></i></span>
+                <h3 id="empty-title">아직 등록된 루틴이 없어요</h3>
+                <p id="empty-copy">작은 습관 하나를 더해 오늘의 흐름을 시작해 보세요.</p>
+                <button class="button button-primary" type="button" data-open-form>첫 루틴 추가하기</button>
+              </div>
+            </article>
+
+            <aside class="panel feedback-panel" aria-labelledby="feedback-title">
+              <div class="panel-heading"><div><p class="eyebrow">실천 패턴 분석</p><h2 id="feedback-title">오늘의 인사이트</h2></div><span class="insight-mark" aria-hidden="true">✦</span></div>
+              <p class="feedback-lead" id="feedback-lead">기록이 쌓이면 나만의 패턴을 찾아드릴게요.</p>
+              <div class="feedback-divider"></div>
+              <p class="feedback-label" id="feedback-label">오늘의 한 걸음</p>
+              <p class="feedback-detail" id="feedback-detail">완료 버튼을 눌러 실천을 기록해 보세요.</p>
+              <div class="feedback-foot"><span class="feedback-check" aria-hidden="true">✓</span><span>나의 기록을 바탕으로 분석해요</span></div>
+            </aside>
+          </section>
+          <footer class="page-footer"><span>DAYFLOW</span><span>나만의 리듬을 기록하는 공간</span></footer>
+        </div>
+      </main>
+    </div>
+
+    <dialog class="routine-dialog" id="routine-dialog" aria-labelledby="dialog-title">
+      <form id="routine-form" method="dialog">
+        <div class="dialog-heading"><div><p class="eyebrow">MY ROUTINE</p><h2 id="dialog-title">새 루틴 추가</h2></div><button class="icon-button dialog-close" type="button" id="close-dialog" aria-label="닫기">×</button></div>
+        <input id="routine-id" name="routineId" type="hidden">
+        <label class="form-label" for="routine-name">루틴 이름</label>
+        <input class="text-input" id="routine-name" name="name" type="text" maxlength="30" placeholder="예: 아침 스트레칭" required autocomplete="off">
+        <label class="form-label" for="routine-category">카테고리</label>
+        <select class="text-input" id="routine-category" name="category" required>
+          <option value="공부">공부</option><option value="운동">운동</option><option value="건강">건강</option><option value="생활">생활</option><option value="기타">기타</option>
+        </select>
+        <p class="form-hint" id="form-hint">루틴은 선택한 날짜부터 기록할 수 있어요.</p>
+        <div class="dialog-actions"><button class="button button-plain" type="button" id="cancel-dialog">취소</button><button class="button button-primary" type="submit" id="save-routine">루틴 저장</button></div>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
